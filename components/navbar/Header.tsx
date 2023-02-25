@@ -1,19 +1,38 @@
 import React from "react";
-import Img from "../extra/Img";
 import BrandLogo from "public/assets/image/brand-logo.png";
 import { Icon } from "@iconify/react";
 import NavItem from "../button/NavItem";
+import Image from "next/image";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import store from "@/redux/app/store";
 
 type Props = {};
 
 export default function Header({}: Props) {
+    const { data: session, status } = useSession();
+    const router = useRouter();
+    const { basket } = store.getState()
+    
+
+    const firstname = session?.user?.name?.split(" ")[0];
+    const lastname = session?.user?.name?.split(" ")[1];
+
     return (
         <header>
             {/* top nav */}
             <div className="flex items-center bg-slate-900 px-2 py-1 h-[3.8rem]">
                 {/* brand logo */}
-                <div className="navbar-link">
-                    <Img className="w-24" src={BrandLogo} />
+                <div className="navbar-link" onClick={() => router.push("/")}>
+                    <div className="w-24 img-container">
+                        <Image
+                            className="img"
+                            src={BrandLogo}
+                            height={1000}
+                            width={600}
+                            alt=""
+                        />
+                    </div>
                 </div>
 
                 {/* search box */}
@@ -36,8 +55,20 @@ export default function Header({}: Props) {
 
                 {/* account */}
                 <div className="navbar-link">
-                    <div className="text-white flex flex-col gap-1">
-                        <p className="text-xs leading-none">Hello, Rono K.</p>
+                    <div
+                        onClick={(e) => {
+                            e.preventDefault();
+                            !session ? signIn() : signOut();
+                        }}
+                        className="text-white flex flex-col gap-1"
+                    >
+                        <p className="text-xs leading-none">
+                            {session
+                                ? `Hello, ${firstname} ${
+                                      lastname && lastname[0]
+                                  }.`
+                                : "Sign In"}
+                        </p>
                         <p className="font-semibold leading-none">
                             Account & Lists
                         </p>
@@ -53,13 +84,15 @@ export default function Header({}: Props) {
                 </div>
 
                 {/* cart */}
-                <div className="navbar-link">
+                <div className="navbar-link" onClick={() => router.push('/checkout')}>
                     <div className="text-white flex items-end gap-1">
                         <div className="relative">
-                            <span className="absolute bg-yellow-500 h-5 text-sm aspect-square leading-none 
-                                        flex items-center justify-center rounded-full font-semibold right-0">
+                            <div
+                                className="absolute bg-yellow-500 h-5 text-sm aspect-square leading-none 
+                                        flex items-center justify-center rounded-full font-semibold right-0"
+                            >
                                 0
-                            </span>
+                            </div>
                             <Icon
                                 className="text-4xl leading-none"
                                 icon="material-symbols:garden-cart-outline"
@@ -77,7 +110,7 @@ export default function Header({}: Props) {
                     <p className="font-bold text-sm">All</p>
                 </div>
                 <NavItem text="Amazon Business" />
-                <NavItem text="Today&apos;s Deals" />
+                <NavItem text="Today's Deals" />
                 <NavItem text="Electronics" />
                 <NavItem text="Food & Grocery" />
                 <NavItem text="Prime" />

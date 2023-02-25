@@ -14,7 +14,8 @@ export default function Img({ src, alt="", priority = false, className="" }: Pro
             <Image
                 className="img"
                 src={src}
-                fill={true}
+                width={1000}
+                height={600}
                 priority={priority}
                 alt={alt}
             />

@@ -1,6 +1,9 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Roboto_Condensed, Roboto } from "@next/font/google";
+import { SessionProvider } from "next-auth/react";
+import { Provider as StoreProvider } from "react-redux";
+import store from "@/redux/app/store";
 
 const robotoCondensed = Roboto_Condensed({
     weight: ["300", "400", "700"],
@@ -15,17 +18,19 @@ const roboto = Roboto({
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <>
-            <style jsx global>
-                {`
-                    :root {
-                        --robotoCondensed-font: ${robotoCondensed.style
-                            .fontFamily};
-                        --roboto-font: ${roboto.style.fontFamily};
-                    }
-                `}
-            </style>
-            <Component {...pageProps} />
-        </>
+        <StoreProvider store={store}>
+            <SessionProvider session={pageProps.session}>
+                <style jsx global>
+                    {`
+                        :root {
+                            --robotoCondensed-font: ${robotoCondensed.style
+                                .fontFamily};
+                            --roboto-font: ${roboto.style.fontFamily};
+                        }
+                    `}
+                </style>
+                <Component {...pageProps} />
+            </SessionProvider>
+        </StoreProvider>
     );
 }
