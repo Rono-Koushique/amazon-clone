@@ -5,21 +5,24 @@ import NavItem from "../button/NavItem";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import store from "@/redux/app/store";
+
+import { useAppSelector } from "@/redux/app/store";
 
 type Props = {};
 
 export default function Header({}: Props) {
-    const { data: session, status } = useSession();
     const router = useRouter();
-    const { basket } = store.getState()
-    
+    const { data: session, status } = useSession();
+    const items = useAppSelector((state) => state.basket.items);
+    const itemsCount = items
+        .map((item) => item.quantity)
+        .reduce((a, b) => a + b, 0);
 
     const firstname = session?.user?.name?.split(" ")[0];
     const lastname = session?.user?.name?.split(" ")[1];
 
     return (
-        <header>
+        <header className="sticky top-0 left-0 z-50">
             {/* top nav */}
             <div className="flex items-center bg-slate-900 px-2 py-1 h-[3.8rem]">
                 {/* brand logo */}
@@ -84,14 +87,17 @@ export default function Header({}: Props) {
                 </div>
 
                 {/* cart */}
-                <div className="navbar-link" onClick={() => router.push('/checkout')}>
+                <div
+                    className="navbar-link"
+                    onClick={() => router.push("/checkout")}
+                >
                     <div className="text-white flex items-end gap-1">
                         <div className="relative">
                             <div
                                 className="absolute bg-yellow-500 h-5 text-sm aspect-square leading-none 
                                         flex items-center justify-center rounded-full font-semibold right-0"
                             >
-                                0
+                                {itemsCount}
                             </div>
                             <Icon
                                 className="text-4xl leading-none"

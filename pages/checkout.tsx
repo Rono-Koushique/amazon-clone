@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useRef } from "react";
 import Header from "@/components/navbar/Header";
 import Head from "next/head";
 import Image from "next/image";
+import { useAppSelector } from "@/redux/app/store";
 
 type Props = {};
 
-export default function checkout({}: Props) {
+export default function Checkout({}: Props) {
+    const items = useAppSelector((state) => state.basket.items);
+
     return (
         <>
             <Head>
@@ -35,7 +38,20 @@ export default function checkout({}: Props) {
                             />
                         </div>
                         <div className="bg-white rounded-lg overflow-hidden p-5 flex flex-col">
-                            <h1 className="text-3xl font-semibold text-gray-700 border-b pb-4">Your Basket is empty</h1>
+                            <h1 className="text-3xl font-semibold text-gray-700 border-b pb-4">
+                                Your Basket is empty
+                            </h1>
+                            <div className="mt-5">
+                                {items.map((item) => {
+                                    return (
+                                        <div key={item.id}>
+                                            <p>{item.title}</p>
+                                            <p>{item.price}</p>
+                                            <p>{item.quantity}</p>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
 

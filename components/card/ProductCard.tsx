@@ -2,7 +2,7 @@ import React from "react";
 import { Product } from "@/types";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/redux/app/store";
 import { addToBasket } from "@/redux/slices/basketSlice";
 
 type Props = Product;
@@ -26,20 +26,11 @@ export default function ProductCard({
     category,
     image,
 }: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const [rating] = React.useState<number>(
         getRandomNumber(min_rating, max_rating)
     );
     const [hasPrime] = React.useState<Boolean>(getRandomBoolean());
-    function addItemToBasket() {
-        const product = {
-            id,
-            title,
-            price,
-            image,
-        };
-        dispatch(addToBasket(product));
-    }
 
     return (
         <div className="relative flex flex-col itemscen bg-white z-30 p-8 h-full">
@@ -86,7 +77,19 @@ export default function ProductCard({
                 </div>
             )}
             <div className="flex flex-col pt-5 mt-auto">
-                <button onClick={()=> addItemToBasket()} className="button">
+                <button
+                    onClick={() => {
+                        dispatch(
+                            addToBasket({
+                                id,
+                                title,
+                                price,
+                                image,
+                            })
+                        );
+                    }}
+                    className="button"
+                >
                     Add to Basket
                 </button>
             </div>
