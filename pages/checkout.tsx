@@ -3,11 +3,15 @@ import Header from "@/components/navbar/Header";
 import Head from "next/head";
 import Image from "next/image";
 import { useAppSelector } from "@/redux/app/store";
+import CkoProductCard from "@/components/card/CkoProductCard";
 
 type Props = {};
 
 export default function Checkout({}: Props) {
     const items = useAppSelector((state) => state.basket.items);
+    const itemsCount = items
+        .map((item) => item.quantity)
+        .reduce((a, b) => a + b, 0);
 
     return (
         <>
@@ -27,7 +31,7 @@ export default function Checkout({}: Props) {
                 <Header />
                 <div className="max-w-screen-2xl w-full mx-auto p-6 gap-6 flex flex-col lg:flex-row">
                     {/* left */}
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-6 w-[1020px]">
                         <div className="rounded-lg overflow-hidden">
                             <Image
                                 className="w-[1020px] object-contain"
@@ -39,16 +43,17 @@ export default function Checkout({}: Props) {
                         </div>
                         <div className="bg-white rounded-lg overflow-hidden p-5 flex flex-col">
                             <h1 className="text-3xl font-semibold text-gray-700 border-b pb-4">
-                                Your Basket is empty
+                                {itemsCount === 0
+                                    ? "Your Basket is empty"
+                                    : "Shopping Basket"}
                             </h1>
-                            <div className="mt-5">
-                                {items.map((item) => {
+                            <div className="flex flex-col gap-10 mt-8">
+                                {items.map((item, i) => {
                                     return (
-                                        <div key={item.id}>
-                                            <p>{item.title}</p>
-                                            <p>{item.price}</p>
-                                            <p>{item.quantity}</p>
-                                        </div>
+                                        <CkoProductCard
+                                            key={item.id}
+                                            item={item}
+                                        />
                                     );
                                 })}
                             </div>

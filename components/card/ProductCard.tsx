@@ -30,7 +30,7 @@ export default function ProductCard({
     const [rating] = React.useState<number>(
         getRandomNumber(min_rating, max_rating)
     );
-    const [hasPrime] = React.useState<Boolean>(getRandomBoolean());
+    const [hasPrime] = React.useState<boolean>(getRandomBoolean());
 
     return (
         <div className="relative flex flex-col itemscen bg-white z-30 p-8 h-full">
@@ -56,6 +56,17 @@ export default function ProductCard({
                                 key={i}
                                 className="text-yellow-500 text-lg"
                                 icon="material-symbols:star"
+                            />
+                        );
+                    })}
+                {Array(5 - rating)
+                    .fill("")
+                    .map((_, i) => {
+                        return (
+                            <Icon
+                                key={i}
+                                className="text-yellow-500 text-lg"
+                                icon="material-symbols:star-outline"
                             />
                         );
                     })}
@@ -85,6 +96,9 @@ export default function ProductCard({
                                 title,
                                 price,
                                 image,
+                                rating,
+                                description,
+                                hasPrime
                             })
                         );
                     }}
