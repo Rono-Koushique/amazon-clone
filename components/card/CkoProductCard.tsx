@@ -18,7 +18,7 @@ export default function CkoProductCard({ item }: Props) {
         item;
     const dispatch = useAppDispatch();
     return (
-        <div className="grid grid-cols-5 w-full">
+        <div className="grid grid-cols-5 w-full py-7 border-b">
             <Image
                 className="object-contain w-[200px] h-[200px] bg-white"
                 src={image}
@@ -26,9 +26,11 @@ export default function CkoProductCard({ item }: Props) {
                 height={200}
                 alt={title}
             />
-            <div className="col-span-3 mx-5 flex flex-col py-4 px-2">
-                <p className="text-lg font-semibold leading-tight">{title}</p>
-                <div className="flex items-center mt-2">
+            <div className="col-span-3 mx-5 flex flex-col gap-2 py-2 px-2">
+                <p className="text-xl text-slate-700 font-bold leading-tight">
+                    {title}
+                </p>
+                <div className="flex items-center">
                     {Array(rating)
                         .fill("")
                         .map((_, i) => {
@@ -52,7 +54,7 @@ export default function CkoProductCard({ item }: Props) {
                             );
                         })}
                 </div>
-                <p className="text-xs my-2 line-clamp-3">{description}</p>
+                <p className="text-xs line-clamp-3 leading-relaxed">{description}</p>
                 {hasPrime && (
                     <div className="flex items-center gap-2">
                         <Image
@@ -67,7 +69,7 @@ export default function CkoProductCard({ item }: Props) {
                         </p>
                     </div>
                 )}
-                <div className="flex items-center gap-1 mt-4">
+                <div className="flex items-center gap-1 mt-2">
                     <div className="mr-2">{`Price: $${price}`}</div>
                     <input
                         value={quantity}
@@ -112,7 +114,7 @@ export default function CkoProductCard({ item }: Props) {
                     </button>
                 </div>
             </div>
-            <div className="justify-self-end font-semibold py-4 px-2">{`$${
+            <div className="justify-self-end text-red-700 text-lg font-bold py-2 px-2">{`$${
                 parseFloat(price) * quantity
             }`}</div>
         </div>
